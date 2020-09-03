@@ -6,10 +6,10 @@ Top view|Trimetric view
 ------- | -------
 ![Top view of the input geometry](https://github.com/ChiangYuChou/SpatialAuxetic/blob/master/MATLAB/Input_top.png)|![The trimetric view](https://github.com/ChiangYuChou/SpatialAuxetic/blob/master/MATLAB/Input.png)
 ### Guiding
-### Output of *main*
+### Output of *main.m*
 The bases of the connectors between panels
 ![Bases](https://github.com/ChiangYuChou/SpatialAuxetic/blob/master/MATLAB/PyramidBases.png)
-### Output of *main2*
+### Output of *main2.m*
 The (internal) gaps between panels
 ![Output](https://github.com/ChiangYuChou/SpatialAuxetic/blob/master/MATLAB/Output.png)
 ### Result
