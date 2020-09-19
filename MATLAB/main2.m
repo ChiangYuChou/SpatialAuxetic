@@ -13,44 +13,46 @@ list_RA=zeros(length(l(:,1)),1);
 for i=1:length(l(:,1))
     if ~isOnGround(l(i,1)) && ~isOnGround(l(i,2))
         j1=(l(:,2)==l(i,1) & isOnGround(l(:,1)));
-        l(j1,:)=l(j1,end:-1:1);
+        l(j1,:)=l(j1,end:-1:1); % If a line has one end on the ground and the other is not, make sure the first end not on the ground.
         j1=(l(:,1)==l(i,1) & isOnGround(l(:,2)));
         j2=(l(:,2)==l(i,2) & isOnGround(l(:,1)));
-        l(j2,:)=l(j2,end:-1:1);
+        l(j2,:)=l(j2,end:-1:1); % If a line has one end on the ground and the other is not, make sure the first end not on the ground.
         j2=(l(:,1)==l(i,2) & isOnGround(l(:,2)));
         if sum(j1)>=3 || sum(j2)>=3
             a=a+1;
-            list_RA(a)=i;
+            list_RA(a)=i; % remember all the lines that "both ends are not on the ground" and "surrounded by more than three panels"
         end
     end
 end
 list_RA=list_RA(1:a);
 
 for i=1:a
-    plot(v(l(list_RA(i),:),1),v(l(list_RA(i),:),2),'b')
+    plot3(v(l(list_RA(i),:),1),v(l(list_RA(i),:),2),v(l(list_RA(i),:),3),'b')
 end
 %% determint the direction of the rotation axes
-f=list_RA(1);
-cand=list_RA(2:end);
 if 1 %swap
     l(list_RA(1),:)=l(list_RA(1),end:-1:1);
 end
+
+f=list_RA(1); % initiate the fixed list
+cand=list_RA(2:end); % initiate the "to be cheched" list
+
 while ~isempty(cand)
     ff=[];
     for i=1:length(f)
-        j1=l(cand,1)==l(f(i),1);
-        j2=l(cand,2)==l(f(i),1);
-        l(cand(j2),:)=l(cand(j2),end:-1:1);
-        j3=l(cand,2)==l(f(i),2);
-        j4=l(cand,1)==l(f(i),2);
-        l(cand(j4),:)=l(cand(j4),end:-1:1);
-        ff=[ff;cand(j1);cand(j2);cand(j3);cand(j4)];
-        cand=cand(~j1 & ~j2 & ~j3 & ~j4);
+        j1=l(cand,1)==l(f(i),1); % Check the direction of rotation axes. These are correct.
+        j2=l(cand,2)==l(f(i),1); % Check the direction of rotation axes. These are not desired.
+        l(cand(j2),:)=l(cand(j2),end:-1:1); % reverse the direction
+        j3=l(cand,2)==l(f(i),2); % Check the direction of rotation axes. These are correct.
+        j4=l(cand,1)==l(f(i),2); % Check the direction of rotation axes. These are not desired.
+        l(cand(j4),:)=l(cand(j4),end:-1:1); % reverse the direction
+        ff=[ff;cand(j1);cand(j2);cand(j3);cand(j4)]; % Update the fixed list
+        cand=cand(~j1 & ~j2 & ~j3 & ~j4); % Update the "to be cheched" list
     end
     f=ff;
 end
-% plot(v(l(list_RA,1),1),v(l(list_RA,1),2),'r*')
-% plot(v(l(list_RA,2),1),v(l(list_RA,2),2),'ro')
+plot(v(l(list_RA,1),1),v(l(list_RA,1),2),'r*')
+plot(v(l(list_RA,2),1),v(l(list_RA,2),2),'ro')
 %% derive the angle of gap
 z=[0 0 -1];
 ang_GP=zeros(size(list_RA));
